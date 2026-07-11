@@ -1,7 +1,7 @@
 FROM python:3.11-slim
 
 # System deps: gcc etc for any packages that need compilation (e.g. chromadb deps)
-RUN apt-get update && apt-get install -y --no-install-recursive \
+RUN apt-get update && apt-get install -y --no-install-recommends \
     build-essential \
     curl \
     && rm -rf /var/lib/apt/lists/*
