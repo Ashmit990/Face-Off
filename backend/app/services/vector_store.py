@@ -1,8 +1,12 @@
+import os
 import chromadb
 from app.services.embeddings import embed_texts
 
-# Persistent local ChromaDB (stored on disk in backend/chroma_data)
-_client = chromadb.PersistentClient(path="./chroma_data")
+# Persistent ChromaDB. Reads CHROMA_PERSIST_DIR in production (set to /data/chroma
+# on Render, pointing at the mounted persistent disk). Falls back to the old local
+# relative path for local dev, so nothing changes on your machine.
+_persist_path = os.getenv("CHROMA_PERSIST_DIR", "./chroma_data")
+_client = chromadb.PersistentClient(path=_persist_path)
 
 def get_or_create_collection(user_id: str):
     collection_name = f"cv_{user_id.replace('-', '_')}"
