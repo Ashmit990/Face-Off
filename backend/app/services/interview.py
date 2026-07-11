@@ -30,7 +30,19 @@ def start_interview(user_id: str) -> dict:
         summary_chunk = get_chunk_by_section(user_id, "summary")
     if not summary_chunk:
         query_result = query_relevant_chunk(user_id, "professional summary background overview", n_results=1)
-        summary_chunk = query_result["documents"][0][0]
+        # Guard against an empty Chroma result. This happens if the CV row exists
+        # in Supabase but its embedded chunks are missing from the vector store —
+        # e.g. after a container restart wiped a non-persistent Chroma volume,
+        # or if chunk storage silently failed during upload. Without this check,
+        # an empty result crashes with an unhandled IndexError (raw 500 to the
+        # frontend) instead of a clear, catchable message.
+        documents = query_result.get("documents") or []
+        if not documents or not documents[0]:
+            raise ValueError(
+                "Your CV data couldn't be found in the question bank. "
+                "Please re-upload your CV and try again."
+            )
+        summary_chunk = documents[0][0]
 
     section = _section_for_chunk(user_id, summary_chunk)
     question = generate_question(summary_chunk, job_description)
