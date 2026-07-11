@@ -1,0 +1,27 @@
+services:
+  - type: web
+    name: faceoff-backend
+    runtime: docker
+    dockerfilePath: ./Dockerfile
+    plan: starter          # bump to "standard" if cold starts on Free/Starter are too slow for a demo
+    region: singapore       # pick whatever's closest to your users; Singapore is a reasonable default given the job posting context
+    healthCheckPath: /health
+    disk:
+      name: chroma-storage
+      mountPath: /data
+      sizeGB: 1              # plenty for CV-scale embeddings; bump later if needed
+    envVars:
+      - key: SUPABASE_URL
+        sync: false           # set manually in Render dashboard — don't commit secrets here
+      - key: SUPABASE_KEY
+        sync: false
+      - key: GROQ_API_KEY
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: CHROMA_PERSIST_DIR
+        value: /data/chroma
+      - key: FASTEMBED_CACHE_DIR
+        value: /data/fastembed_cache
+      - key: CORS_ALLOWED_ORIGINS
+        value: https://your-app.vercel.app   # replace with your real Vercel domain once deployed

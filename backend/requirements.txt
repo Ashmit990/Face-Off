@@ -1,0 +1,15 @@
+fastapi
+uvicorn[standard]
+pydantic[email]
+python-dotenv
+pydantic
+pydantic-settings
+chromadb
+fastembed
+pymupdf
+groq
+supabase
+python-multipart
+langgraph
+langchain-core
+langsmith

@@ -1,0 +1,4 @@
+﻿{
+  "session_id": "882d95d4-fe54-4b29-8522-2b4589546d19",
+  "answer": "I built the backend for Provify, an AI code interview platform, using FastAPI and PostgreSQL. I designed normalized database schemas for storing sessions and user data, implemented JWT-based authentication, and used ChromaDB for vector storage. For scalability I used async endpoints in FastAPI and connection pooling for the database."
+}
